@@ -1,0 +1,17 @@
+<%- include('header', {title: pagetitle}) -%>
+<%- include('menu',{uname: username}) -%>
+<div class="container-fluid">
+    <div class="row" id="resourcesss">
+        <%if(isAdmin){%>
+            <a href="/resource/new" class="new-resource col-2 btn"><h2>Új Erőforrás</h2></a>
+        <%}%>
+        <%for (key in resources){var rsrc = resources[key]%>
+            <a href="/resource/<%=rsrc._id%>" class="resource btn btn-dark col-2">
+                <h2>
+                    <%=rsrc.name%>-<%=rsrc.type%>
+                </h2>
+            </a>
+        <% } %>
+    </div>
+</div>
+<%- include('footer') -%>

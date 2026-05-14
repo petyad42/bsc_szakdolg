@@ -1,0 +1,19 @@
+<%- include('header', {title: pagetitle}) -%>
+<%- include('menu',{uname: username}) -%>
+<div class="container-fluid">
+    <div class="row">
+        <h1>Hello, <%=username%>!</h1>
+    </div>
+    <div class="row">
+        <a href="/resource" class="btn col-5 bg-dark text-white">
+            <h2>Erőforrások</h2>
+        </a>
+        <div class="col-2">
+
+        </div>
+        <a href="/resource" class="btn col-5 bg-dark text-white">
+            <h2>Felhasználók</h2>
+        </a>
+    </div>
+</div>
+<%- include('footer') -%>

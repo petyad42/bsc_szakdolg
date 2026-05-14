@@ -1,0 +1,29 @@
+<%- include('header', {title: pagetitle}) -%>
+<%- include('menu',{uname: username}) -%>
+
+<div class="container-fluid">
+    <form method="post">
+        <div class="form-group col-4">
+            <label for="name">Resource Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Resoure name"
+                   value="<%= (typeof resource === 'undefined') ? '' : resource.name%>">
+        </div>
+        <div class="form-group col-4">
+            <label for="type">Resource Type</label>
+            <input type="text" class="form-control" id="type" name="type" placeholder="Resource Type"
+                   value="<%= (typeof resource === 'undefined') ? '' : resource.type%>">
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-primary col-2">Mentés</button>
+            <div class="col-1"></div>
+            <a href="<%if(typeof resource === 'undefined'){%>
+                    /resource
+                <%}else{%>
+                    /resource/<%=resource._id%>
+                <%}%>
+                "
+                class="btn btn-primary col-2">Mégse</a>
+        </div>
+    </form>
+</div>
+<%- include('footer') -%>

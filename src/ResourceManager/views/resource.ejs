@@ -1,0 +1,28 @@
+<%- include('header', {title: pagetitle}) -%>
+<%- include('menu',{uname: username}) -%>
+<div class="container-fluid">
+    <div class="row">
+        <h1><%= resource.name%>-<%= resource.type%></h1>
+    </div>
+    <div class="row">
+        <a href="/calendar/<%= resource._id%>" class="btn btn-secondary col-4 h-5 text-white">
+            <h2>Naptár</h2>
+        </a>
+        <%if(isAdmin){%>
+
+        <a href="/resource/edit/<%= resource._id%>" class="btn btn-dark col-4 text-white">
+            <h2>Szerkesztés</h2>
+        </a>
+        <a href="/resource/del/<%= resource._id%>" class="btn btn-danger col-4 text-white">
+            <h2>Törlés</h2>
+        </a>
+
+        <%}%>
+    </div>
+    <div class="row">
+        <a href="/resource" class="btn btn-primary text-white">
+            <h2>Vissza</h2>
+        </a>
+    </div>
+</div>
+<%- include('footer') -%>

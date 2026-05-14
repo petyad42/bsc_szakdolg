@@ -1,0 +1,66 @@
+
+<%- include('header', {title: pagetitle}) -%>
+<%- include('menu',{uname: username}) -%>
+
+<%function formatDate(currentDate){
+
+    // Get individual date components
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const hours = String(currentDate.getHours()).padStart(2, '0');
+    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
+
+    // Define your custom date format
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+} %>
+
+
+<div class="container-fluid">
+    <form method="post">
+        <div class="form-group col-4">
+            <label for="starts">Kezdés</label>
+            <input class="form-control" type="datetime-local" placeholder="Válassz dátumot!" id="starts" name="starts"
+                   value="<%= (typeof reservation === 'undefined') ? '' :  reservation ? formatDate(reservation.starts) : '2023-05-26T19:00'%>">
+
+        </div>
+        <div class="form-group col-4">
+            <label for="ends">Vége</label>
+            <input class="form-control" type="datetime-local" placeholder="Válassz dátumot!" id="ends" name="ends" 
+                    value="<%= (typeof reservation === 'undefined') ? '' : reservation ? formatDate(reservation.ends) : '2023-05-26T19:00'%>"> <!--IDO ATALLAS ANOMALIA-->
+
+        </div>
+
+
+        <% /* %>
+        <div class="col-4 form-group">
+            <label for="repeats">Ismétlődés</label>
+            <select class="form-control" id="repeats" name="repeats">
+              <option value='NONE' <%=(typeof reservation === 'undefined') ? '' : (reservation.repeats === 'NONE') ? selected='selected':''%>>Nem ismétlődik</option>
+              <option value='DAILY'<%=(typeof reservation === 'undefined') ? '' : (reservation.repeats === 'DAILY') ? selected='selected':''%>>Naponta</option>
+              <option value='WEEKLY'<%=(typeof reservation === 'undefined') ? '' : (reservation.repeats === 'WEEKLY') ? selected='selected':''%>>Hetente</option>
+              <option value='MONTHLY'<%=(typeof reservation === 'undefined') ? '' : (reservation.repeats === 'MONTHLY') ? selected='selected':''%>>Havonta</option>
+              <option value='YEARLY'<%=(typeof reservation === 'undefined') ? '' : (reservation.repeats === 'YEARLY') ? selected='selected':''%>>Évente</option>
+            </select>
+        </div>
+
+        <div class="form-group col-4">
+            <label for="endrepeat">Ismétlődés vége</label>
+            <input class="form-control" type="datetime-local" placeholder="Válassz dátumot!" id="endrepeat" name="endrepeat" 
+                    value="<%=(typeof reservation === 'undefined') ? '' : (reservation.endRepeat === null) ? '' : reservation ? formatDate(reservation.endRepeat) : '2023-05-26T19:00'%>"> <!--IDO ATALLAS ANOMALIA-->
+
+        </div>
+        <% */ %>
+
+        
+        <div class="row">
+            <button type="submit" class="btn btn-primary col-2">Mentés</button>
+            <%if(typeof reservation !== 'undefined'){%>
+                <a href="/calendar/<%=resource._id%>/reservation/del/<%=reservation._id%>" class="btn btn-danger col-2">Törlés</a>
+            <%}%>
+            <div class="col-1"></div>
+            <a href="/calendar/<%=resource._id%>" class="btn btn-primary col-2">Mégse</a>
+        </div>
+    </form>
+</div>
+<%- include('footer') -%>

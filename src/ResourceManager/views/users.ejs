@@ -1,0 +1,64 @@
+<%- include('header', {title: pagetitle}) -%>
+<%- include('menu',{uname: username}) -%>
+<div class="container-fluid">
+    <%console.log(`IS ADMIN: ${isAdmin}`);%>
+
+    <div class="row bg-secondary text-white">
+        <div class="col-2">
+            <h2>
+                Felhaszálónév
+            </h2>
+        </div>
+        <div class="col-3">
+            <h2>
+                Email
+            </h2>
+        </div>
+        <div class="col-2">
+            <h2>
+                Admin?
+            </h2>
+        </div>
+    </div>
+    <%for (key in users){var usr = users[key]%>
+        <div class="row">
+            <div class="col-2">
+                <h2>
+                    <%=usr.username%>
+                </h2>
+            </div>
+            <div class="col-3">
+                <h2>
+                    <%=usr.email%>
+                </h2>
+            </div>
+            <div class="col-2">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                       <%if(usr.isAdmin){%>checked<%}%>
+                disabled>
+            </div>
+            <%if(usr.username!==username){%>
+                <%if(usr.isAdmin){%>
+                <a class="col-2 btn btn-secondary" href="/users/<%=usr._id%>/makeadmin">
+                    <h2>
+                        TakeAdmin
+                    </h2>
+                </a>
+                <%}else{%>
+                <a class="col-2 btn btn-primary" href="/users/<%=usr._id%>/makeadmin">
+                    <h2>
+                        MakeAdmin
+                    </h2>
+                </a>
+                <%}%>
+
+                <a class="col-2 btn btn-danger" href="/users/<%=usr._id%>/del">
+                    <h2>
+                        Törlés
+                    </h2>
+                </a>
+            <%}%>
+        </div>
+    <% } %>
+</div>
+<%- include('footer') -%>

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deployment
+spec:
+  replicas: 1  
+  selector:
+    matchLabels:
+      app: node-app
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+        - name: node-app
+          image: petyad/resourcemanager:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "10m"
+            limits:
+              cpu: "800m"
+          env:
+            - name: MONGO_HOST
+              value: "mongo-service:27017"
+            - name: MONGO_URI
+              value: "mongodb://mongo-service:27017/resourcemanager"
+            - name: SECRET
+              value: "iowqaut9834yutg0423jt0gf3w0q9gfj"
+            - name: NODE_ENV
+              value: "production"
+            - name: INIT
+              value: 'DUMMIES'

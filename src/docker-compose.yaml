@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/data/db
+
+  node-app:
+    build: .
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
+    volumes:
+      - ./ResourceManager:/usr/src/app
+volumes:
+  mongodata:
+    driver: local

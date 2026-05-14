@@ -1,0 +1,105 @@
+<%- include('header', {title: pagetitle}) -%>
+<%- include('menu',{uname: username}) -%>
+<div class="container">
+    <div class="row">
+        <div class="col-3"><h1><%= resource.name%>-<%= resource.type%></h1></div>
+        <%if(isAdmin){%>
+        <a href="/calendar/<%=resource._id%>/reservation/new" class="col-3 btn btn-dark"><h2>Új foglalás</h2></a>
+        <%}%>
+        <a href="/resource/<%=resource._id%>" class="col-3 btn btn-secondary"><h2>Vissza</h2></a>
+    </div>
+    <div class="row">
+        <%
+
+        let currYear = y;
+        let currMonth = m;
+        const months = ["Január","Február","Március","Árpilis","Május","Június","Július","Augusztus","Szeptember","Október","November","December"]
+        let date = new Date();
+        %>
+        <div class="col-4 current-date"><h1><%=currYear +" " + months[currMonth]%></h1></div>
+        <a class="col-1 btn btn" href="?m=<%=(m-1+12)%12%>&y=<%if(m===0){%><%=y-1%><%}else{%><%=y%><%}%>">
+            <h1><</h1>
+            </a>
+        <a class="col-1 btn btn" href="?m=<%=(m+1)%12%>&y=<%if(m===11){%><%=y+1%><%}else{%><%=y%><%}%>">
+            <h1>></h1>
+        </a>
+    </div>
+    <div class="row text-center bg-dark text-white">
+        <% const weekday = ["Vasárnap","Hétfő","Kedd","Szerda","Csütörötök","Péntek","Szombat"];%>
+        <%for(w in weekday){weekd = weekday[w]%>
+        <div class="col"><h2><%=weekd%></h2></div>
+        <%}%>
+    </div>
+    <%var startDay = new Date(currYear,currMonth,1);%>
+    <%var lastDay = new Date(currYear,currMonth+1,0);%>
+    <%var lastDayLast = new Date(currYear,currMonth,0);%>
+    <%var monthStarted = false;%>
+    <%var day=(lastDay.getDate())-startDay.getDay();%>
+    <%var dayLast=(lastDayLast.getDate())-startDay.getDay();%>
+    <%var dayToWrite=0;%>
+    <%function weekCount(year, month_number) {
+
+        // month_number is in the range 1..12
+
+        var firstOfMonth = new Date(year, month_number-1, 1);
+        var lastOfMonth = new Date(year, month_number, 0);
+
+        var used = firstOfMonth.getDay() + lastOfMonth.getDate();
+
+        return Math.ceil( used / 7);
+    }%>
+    <%var currWeekCount = weekCount(currYear,currMonth+1);%>
+    <%for(var i=0;i<currWeekCount;i++){%>
+        <div class="row">
+            <%for(var j=0;j<7;j++){%>
+                <%if(!(i===0&&j<startDay.getDay())){%> <!--Azert hogy jol szinezze a napokat--->
+                    <%monthStarted = true;%>
+                <%}%>
+                <%if((i===currWeekCount-1&&j>lastDay.getDay())){%>
+                    <%monthStarted = false;%>
+                <%}%>
+                <div class="col <%if(!monthStarted){%>
+                        bg-dark
+                        text-secondary
+                    <%}else if((i%2==0&&j%2==0)||(i%2!=0&&j%2!=0)){%>
+                        bg-secondary
+                        text-white
+                    <%}%>
+
+                    ">
+                    <div class="row text-center">
+                        <h3>
+                            <%if(i===0&&j<startDay.getDay()){%>
+                                <%dayToWrite = dayLast%(lastDayLast.getDate())+1%>
+                                <%=dayToWrite%>
+                            <%}else{%>
+                                <%dayToWrite = day%(lastDay.getDate())+1%>
+                                <%=dayToWrite%>
+                            <%}%>
+                        </h3>
+                    </div>
+                    <%for (reserv in reservations){var rsvs = reservations[reserv]%>
+                        <%if((rsvs.resourceID.toHexString()===resource._id.toHexString())&&
+                                rsvs.starts.getMonth()===currMonth&&
+                                rsvs.starts.getFullYear()===currYear&&
+                                monthStarted&&
+                                (rsvs.starts.getDate()===dayToWrite)){%>
+                    <%if(isAdmin){%>
+
+                    <a class="row btn btn-primary" href="/calendar/<%=resource._id%>/reservation/edit/<%=rsvs._id%> "> <!--Inline block elem -->
+                        <%=`${rsvs.starts.getHours()}:${(rsvs.starts.getMinutes() < 10 ? '0' : '') +rsvs.starts.getMinutes()} - ${rsvs.ends.getHours()}:${(rsvs.ends.getMinutes() < 10 ? '0' : '') +rsvs.ends.getMinutes()}`%>
+                    </a>
+                    <%}else{%>
+                    <div class="row btn btn-primary"> <!--Inline block elem -->
+                        <%=`${rsvs.starts.getHours()}:${(rsvs.starts.getMinutes() < 10 ? '0' : '') +rsvs.starts.getMinutes()} - ${rsvs.ends.getHours()}:${(rsvs.ends.getMinutes() < 10 ? '0' : '') +rsvs.ends.getMinutes()}`%>
+                    </div>
+                    <%}%>
+
+                    <%}%>
+                    <% } %>
+                </div>
+            <%day++;dayLast++;}%>
+        </div>
+    <%}%>
+</div>
+<%- include('footer') -%>

@@ -1,0 +1,31 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: node-app-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: node-app-deployment
+  minReplicas: 1
+  maxReplicas: 3
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 5
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 3
+    scaleDown:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Pods
+        value: 1
+        periodSeconds: 30
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
